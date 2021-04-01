@@ -41,6 +41,7 @@ client.on('message', async message => {{
 }});
 
 client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot) return;
     if (reaction.partial) {
         try {
             await reaction.message.fetch();
@@ -57,6 +58,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
 })
 
 client.on('messageReactionRemove', async (reaction, user) => {
+    if (user.bot) return;
     if (reaction.message.partial) {
         try {
             await reaction.message.fetch();
