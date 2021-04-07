@@ -1,9 +1,12 @@
 const config = require('./config/config.json');
 const data = require('./resources/data.json');
+const relativePath = './resources/cnt.json';
 
+const fs = require('fs');
 const discord = require('discord.js');
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const jsonProcessor = require('./jsonProcessor');
+const randomGenerator = require('./randomGenerator');
 
 client.on('ready', () => {
     console.log(`I am Ready ${client.user.tag}`);
@@ -51,7 +54,7 @@ client.on('message', (message) => {
             cnt += cntJson[key];
         });
 
-        let random = getRandomInt(1, cnt + 1);
+        let random = randomGenerator.getRandomInt(1, cnt + 1);
         for (let key in cntJson) {
             random -= cntJson[key];
             if (random <= 0) {
@@ -76,7 +79,6 @@ client.on('messageDelete', (message) => {
     if (message.author.bot) return;
 
     let id = message.author.id;
-    let relativePath = './resources/cnt.json';
     let cntJson = jsonProcessor.getJson(relativePath);
 
     if (cntJson[id] === undefined) {
