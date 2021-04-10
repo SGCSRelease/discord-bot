@@ -95,7 +95,6 @@ client.on('messageDelete', (message) => {
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
-    if (reaction.message.embeds[0] === undefined) return;
 
     if (reaction.partial) {
         try {
@@ -106,6 +105,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         }
     }
 
+    if (reaction.message.embeds[0] === undefined) return;
     if (reaction.message.embeds[0].title !== "역할 설정") return;
     let emoji = reaction.emoji.name;
     let emojiIndex = data.imoji.findIndex(e => e === emoji);
