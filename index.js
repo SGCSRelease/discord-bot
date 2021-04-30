@@ -48,19 +48,19 @@ client.on('message', (message) => {
     // Pick
     else if (message.content === '!pick' && message.author.id === config.admin_id) {
         let cntJson = jsonProcessor.getJson(relativePath);
+        let conditioningUsers = new Array();
+        let sendMessage = '';
 
-        let cnt = 0;
         Object.keys(cntJson).forEach((key) => {
-            cnt += cntJson[key];
+            if (cntJson[key] >= 3) {
+                conditioningUsers.push(key);
+            }
         });
 
-        let random = randomGenerator.getRandomInt(1, cnt + 1);
-        for (let key in cntJson) {
-            random -= cntJson[key];
-            if (random <= 0) {
-                message.channel.send(key);
-                break;
-            }
+        for (let i = 0; i < 3; i++) {
+            let randomIndex = randomGenerator.getRandomInt(0, conditioningUsers.length);
+            sendMessage += conditioningUsers[randomIndex] + '\n';
+            conditioningUsers.splice(randomIndex, 0);
         }
     }
     // CountMessage
