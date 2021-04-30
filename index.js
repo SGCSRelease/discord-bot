@@ -62,6 +62,8 @@ client.on('message', (message) => {
             sendMessage += conditioningUsers[randomIndex] + '\n';
             conditioningUsers.splice(randomIndex, 0);
         }
+
+        message.channel.send(sendMessage);
     }
     // CountMessage
     else {
