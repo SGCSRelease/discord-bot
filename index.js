@@ -60,7 +60,7 @@ client.on('message', (message) => {
         for (let i = 0; i < 3; i++) {
             let randomIndex = randomGenerator.getRandomInt(0, conditioningUsers.length);
             sendMessage += conditioningUsers[randomIndex] + '\n';
-            conditioningUsers.splice(randomIndex, 0);
+            conditioningUsers.splice(randomIndex, 1);
         }
 
         message.channel.send(sendMessage);
