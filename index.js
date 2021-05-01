@@ -66,34 +66,34 @@ client.on('message', (message) => {
         message.channel.send(sendMessage);
     }
     // CountMessage
-    else {
-        let id = message.author.id;
-        let cntJson = jsonProcessor.getJson(relativePath);
+    // else {
+    //     let id = message.author.id;
+    //     let cntJson = jsonProcessor.getJson(relativePath);
 
-        if (cntJson[id] === undefined) cntJson[id] = 1;
-        else cntJson[id]++;
-        fs.writeFileSync(jsonProcessor.getAbsolutePath(relativePath), JSON.stringify(cntJson));
-    }
+    //     if (cntJson[id] === undefined) cntJson[id] = 1;
+    //     else cntJson[id]++;
+    //     fs.writeFileSync(jsonProcessor.getAbsolutePath(relativePath), JSON.stringify(cntJson));
+    // }
 });
 
-client.on('messageDelete', (message) => {
-    if (message.author === null) return;
-    if (message.author.bot) return;
+// client.on('messageDelete', (message) => {
+//     if (message.author === null) return;
+//     if (message.author.bot) return;
 
-    let id = message.author.id;
-    let cntJson = jsonProcessor.getJson(relativePath);
+//     let id = message.author.id;
+//     let cntJson = jsonProcessor.getJson(relativePath);
 
-    if (cntJson[id] === undefined) {
-        console.error("Uncaught Reference Error: " + id + " is not defined");
-        return;
-    }
-    else if (cntJson[id] <= 0) {
-        console.error("Invalid value error: " + id + " is zero or negative");
-        return;
-    }
-    else cntJson[id]--;
-    fs.writeFileSync(jsonProcessor.getAbsolutePath(relativePath), JSON.stringify(cntJson));
-});
+//     if (cntJson[id] === undefined) {
+//         console.error("Uncaught Reference Error: " + id + " is not defined");
+//         return;
+//     }
+//     else if (cntJson[id] <= 0) {
+//         console.error("Invalid value error: " + id + " is zero or negative");
+//         return;
+//     }
+//     else cntJson[id]--;
+//     fs.writeFileSync(jsonProcessor.getAbsolutePath(relativePath), JSON.stringify(cntJson));
+// });
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
