@@ -7,12 +7,13 @@ const discord = require('discord.js');
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const jsonProcessor = require('./jsonProcessor');
 const randomGenerator = require('./randomGenerator');
+const git = require('./git');
 
 client.on('ready', () => {
     console.log(`I am Ready ${client.user.tag}`);
 });
 
-client.on('message', (message) => {
+client.on('message', async (message) => {
     if (message.author.bot) return;
 
     // SetRole
@@ -64,6 +65,10 @@ client.on('message', (message) => {
         }
 
         message.channel.send(sendMessage);
+    }
+    else if (message.content.startsWith('!git ')) {
+        let contributionDay = await git.parseContributionDayinLastMonth(message.content.substring(5, message.content.length));
+        message.channel.send(contributionDay);
     }
     // CountMessage
     // else {
