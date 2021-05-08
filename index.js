@@ -14,8 +14,6 @@ client.on('ready', () => {
 });
 
 client.on('message', async (message) => {
-    if (message.author.bot) return;
-
     // SetRole
     if (message.content === '!role' && message.author.id === config.admin_id) {
         const embed = new discord.MessageEmbed();
