@@ -64,9 +64,18 @@ client.on('message', async (message) => {
 
         message.channel.send(sendMessage);
     }
+    // Git
     else if (message.content.startsWith('!git ')) {
         let contributionDay = await git.parseContributionDayinLastMonth(message.content.substring(5, message.content.length));
         message.channel.send(contributionDay);
+    }
+    // Attendance check
+    else if (message.content === '!check' && message.author.id === config.admin_id) {
+        let sendMessage = '';
+        for (let member of config.active_member) {
+            sendMessage += await git.parseCommitinLastMonth(member);
+        }
+        message.channel.send(sendMessage);
     }
     // CountMessage
     // else {

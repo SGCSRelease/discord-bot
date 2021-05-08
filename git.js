@@ -55,6 +55,9 @@ let parseCommitinLastMonth = (user) => {
         'year': (parseInt(today[2]) - (today[0] === '1')).toString(),
         'month': (parseInt(today[0]) - 1 + 12 * (today[0] === '1')).toString(),
     };
+    if (lastMonth.month.length === 1) {
+        lastMonth.month = '0' + lastMonth.month;
+    }
     lastMonth.date = new Date(lastMonth.year, lastMonth.month, 0).getDate().toString();
     let url = `https://github.com/${user}?tab=overview&from=${lastMonth.year}-${lastMonth.month}-01&to=${lastMonth.year}-${lastMonth.month}-${lastMonth.date}`;
     let commits;
@@ -68,23 +71,23 @@ let parseCommitinLastMonth = (user) => {
         const $ = cheerio.load(res.data);
         let $commits = $('.color-text-primary').filter('.ws-normal').filter('.text-left');
         if ($commits.html() === null) {
-            console.log(user + '\t0');
-            return user + '\t0';
+            return '0\n';
         }
         let $commitMessage = $commits.html().split(' ').reduce((pre, val) => {
             if (val !== '')
             pre.push(val);
             return pre;
         }, []);
-        commits = $commitMessage[2].replace('\n', '');
-        console.log(user + '\t' + commits);
+        commits = $commitMessage[2];
         return commits;
     })
     .catch((err) => {
         // console.error(err);
-        return 'Invalid Github ID';
+        return 'Invalid Github ID\n';
     });
 }
+
+parseCommitinLastMonth('nant0313');
 
 module.exports = {
     parseContributionDayinLastMonth,
