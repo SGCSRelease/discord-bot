@@ -70,7 +70,7 @@ let parseCommitinLastMonth = (user) => {
     .then((res) => {
         const $ = cheerio.load(res.data);
         let $commits = $('.color-text-primary').filter('.ws-normal').filter('.text-left');
-        if ($commits.html() === null) {
+        if ($commits.html() === null || $commits.html().includes('commit') === false) {
             return '0\n';
         }
         let $commitMessage = $commits.html().split(' ').reduce((pre, val) => {
