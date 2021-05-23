@@ -1,91 +1,37 @@
-const config = require('./config/config.json');
-const data = require('./resources/data.json');
-const relativePath = './resources/cnt.json';
-
-const fs = require('fs');
 const discord = require('discord.js');
 const client = new discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const jsonProcessor = require('./jsonProcessor');
-const randomGenerator = require('./randomGenerator');
-const git = require('./git');
+const path, { join } = require('path');
+const { readdirSync } = require('fs');
+const config = require('./config.json');
+const data = require('./resources/data.json');
 
+const relativePath = './resources/cnt.json';
+const jsonProcessor = require('./include/jsonProcessor');
+const randomGenerator = require('./include/randomGenerator');
+
+/* Import all commands */
+const commandFiles = readdirSync(join(__dirname, "commands")).filter((file) => file.endsWith(".js"));
+for (const file of commandFiles) {
+    const command = require(join(__dirname, "commands", `${file}`));
+    client.commands.set(command.name, command);
+}
+
+/* Client Events */
 client.on('ready', () => {
     console.log(`I am Ready ${client.user.tag}`);
 });
+client.on("warn", (info) => console.log(info));
+client.on("error", console.error);
+
+client.login(config.token);
 
 client.on('message', async (message) => {
-    // SetRole
-    if (message.content === '!role' && message.author.id === config.admin_id) {
-        const embed = new discord.MessageEmbed();
-        embed.setTitle('역할 설정');
-        embed.setColor(0xff0000);
-        let description = "Emoji를 눌러 해당 역할을 획득할 수 있습니다.\n\n";
-        for (let i = 0; i < data.role_size; i++) {
-            description += data.imoji[i];
-            description += data.role[i];
-            description += '\n';
-        }
-        embed.setDescription(description);
-
-        message.channel.send(embed).then(embedMessage => {
-            Promise.all([
-                embedMessage.react('1️⃣'),
-                embedMessage.react('2️⃣'),
-                embedMessage.react('3️⃣'),
-                embedMessage.react('4️⃣'),
-                embedMessage.react('5️⃣'),
-                embedMessage.react('6️⃣'),
-                embedMessage.react('7️⃣')
-                // message.react('8️⃣'),
-                // message.react('9️⃣'),
-                // message.react('🔟')
-            ])
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
-    }
-    // Pick
-    else if (message.content === '!pick' && message.author.id === config.admin_id) {
-        let cntJson = jsonProcessor.getJson(relativePath);
-        let conditioningUsers = new Array();
-        let sendMessage = '';
-
-        Object.keys(cntJson).forEach((key) => {
-            if (cntJson[key] >= 3) {
-                conditioningUsers.push(key);
-            }
-        });
-
-        for (let i = 0; i < 3; i++) {
-            let randomIndex = randomGenerator.getRandomInt(0, conditioningUsers.length);
-            sendMessage += conditioningUsers[randomIndex] + '\n';
-            conditioningUsers.splice(randomIndex, 1);
-        }
-
-        message.channel.send(sendMessage);
-    }
-    // Git
-    else if (message.content.startsWith('!git ')) {
-        let contributionDay = await git.parseContributionDayinLastMonth(message.content.substring(5, message.content.length));
-        message.channel.send(contributionDay);
-    }
-    // Attendance check
-    else if (message.content === '!check' && message.author.id === config.admin_id) {
-        let sendMessage = '';
-        for (let member of config.active_member) {
-            sendMessage += await git.parseCommitinLastMonth(member);
-        }
-        message.channel.send(sendMessage);
-    }
-    // CountMessage
-    // else {
-    //     let id = message.author.id;
-    //     let cntJson = jsonProcessor.getJson(relativePath);
-
-    //     if (cntJson[id] === undefined) cntJson[id] = 1;
-    //     else cntJson[id]++;
-    //     fs.writeFileSync(jsonProcessor.getAbsolutePath(relativePath), JSON.stringify(cntJson));
-    // }
+    if (message.author.bot) return;
+    if (message.content === '!role' && message.author.id === config.admin_id) {}
+    else if (message.content === '!pick' && message.author.id === config.admin_id) {}
+    else if (message.content.startsWith('!git ')) {}
+    else if (message.content === '!check' && message.author.id === config.admin_id) {}
+    else {}
 });
 
 // client.on('messageDelete', (message) => {
@@ -146,5 +92,3 @@ client.on('messageReactionRemove', async (reaction, user) => {
     let role = reaction.message.guild.roles.cache.find(r => r.name === data.role[emojiIndex]);
     reaction.message.guild.members.cache.find(m => m.user.id === user.id).roles.remove(role);
 });
-
-client.login(config.token);

@@ -1,0 +1,11 @@
+{
+    "name": "ReleaseDiscordBot",
+    "description": "Discord Bot built with discord.js",
+    "repository": "https://github.com/SGCSRelease/ReleaseDiscordBot",
+    "logo": "",
+    "keywords": [
+        "discord",
+        "discordjs",
+        "bot"
+    ]
+}
