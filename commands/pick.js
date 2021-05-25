@@ -1,3 +1,5 @@
+const randomGenerator = require('../include/randomGenerator');
+
 module.exports = {
     execute(message) {
         let cntJson = jsonProcessor.getJson(relativePath);
