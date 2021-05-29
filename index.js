@@ -4,7 +4,6 @@ const { readdirSync } = require('fs');
 const config = require('./config.json');
 const data = require('./resources/data.json');
 
-
 // modify
 const relativePath = './resources/cnt.json';
 const jsonProcessor = require('./include/jsonProcessor');
