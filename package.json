@@ -1,16 +1,17 @@
 {
-  "name": "releasediscordbot",
+  "name": "release-discord-bot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Discord bot for Sogang Release",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Sogang University Releaseans <release@sogang.ac.kr>",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
-    "cheerio": "*",
-    "discord.js": "^12.5.1"
+    "axios": "^1.6.7",
+    "cheerio": "1.0.0-rc.12",
+    "discord.js": "^14.14.1"
   }
 }
